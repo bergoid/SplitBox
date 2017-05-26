@@ -1,0 +1,1 @@
+(function (root, undefined) { require(['app'],function(app){app.go();}); })(this);
