@@ -6,6 +6,34 @@ var app = {};
 
 var container = undefined;
 
+app.css = function()
+{
+    return ra.create
+    (
+        "style",
+        {
+            type: "text/css",
+            innerHTML: "\
+            body\
+            {\
+                display: flex;\
+                flex-flow: column nowrap;\
+                height: 100vh;\
+                max-height: 100vh;\
+                margin: 0;\
+                padding: 0;\
+            }\
+            .container\
+            {\
+                flex-grow: 1;\
+                margin: 1em;\
+                border: 2px solid #808080;\
+            }\
+            "
+        }
+    );
+};
+
 //
 var containerDOM = function()
 {
@@ -13,7 +41,6 @@ var containerDOM = function()
     (
         "div",
         {
-            id: "idContainer",
             className: "container"
         }
     );
@@ -26,7 +53,7 @@ var panelDOM = function(content)
     (
         "div",
         {
-            className: "testClass",
+            className: "sbPanel",
             innerHTML: content
         }
     );
@@ -35,10 +62,10 @@ var panelDOM = function(content)
 //
 var layout =
 {
-    row:
+    srow:
     [
         {
-            column:
+            scol:
             [
                 panelDOM("A"),
                 panelDOM("B"),
@@ -46,10 +73,10 @@ var layout =
             ]
         },
         {
-            column:
+            scol:
             [
                 {
-                    row:
+                    srow:
                     [
                         panelDOM("D"),
                         panelDOM("E"),
@@ -57,7 +84,7 @@ var layout =
                     ]
                 },
                 {
-                    row:
+                    srow:
                     [
                         panelDOM("G"),
                         panelDOM("H"),
@@ -74,8 +101,18 @@ var layout =
 app.go = function(state)
 {
     container = containerDOM();
-    ra.body().appendChild(container);
-    sb.draw(container, layout);
+
+    ra.append
+    (
+        ra.body(),
+        [
+            sb.css(),
+            app.css(),
+            container
+        ]
+    );
+
+    sb.build(container, layout);
 };
 
 //

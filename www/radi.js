@@ -105,7 +105,7 @@ ra.isString = function(value)
 //
 ra.getEvent = function(event)
 {
-    return (window.event == undefined) ? event : window.event;
+    return (root.event == undefined) ? event : root.event;
 }
 
 //
@@ -127,13 +127,13 @@ ra.getKey = function(event)
 //
 ra.el = function (id)
 {
-    return document.getElementById(id);
+    return root.document.getElementById(id);
 };
 
 //
 ra.body = function ()
 {
-    return document.getElementsByTagName("body")[0];
+    return root.document.getElementsByTagName("body")[0];
 };
 
 //
@@ -147,7 +147,7 @@ ra.deleteChildren = function(element)
 //
 ra.deleteElementById = function(id)
 {
-    var element = document.getElementById(id);
+    var element = root.document.getElementById(id);
 
     if (element)
         if (element.parentNode)
@@ -168,19 +168,16 @@ ra.create = function(arg1, arg2, arg3)
         // (array)
         if (ra.isArray(arg1))
         {
+            // arg1 only contains 1 HTML element: just return it
+            if ((arg1.length == 1) && (ra.isElement(arg1[0])))
+                return arg1[0];
+
             // if the first element of arg1 is a string: recurse
             if (ra.isString(arg1[0]))
                 return ra.create(arg1[0], arg1[1], arg1[2]);
             else
-                // if the first element of arg1 is an array too,
                 // loop over all elements of arg1 and recurse
-                if (ra.isArray(arg1[0]))
-                    return arg1.map( function (elem) { return ra.create(elem); } );
-                else
-                {
-                    ra.error("ra.create(): the argument has an invalid type");
-                    return;
-                }
+                return arg1.map( function (elem) { return ra.create(elem); } );
         }
 
         else
@@ -201,7 +198,7 @@ ra.create = function(arg1, arg2, arg3)
                     else
                         properties = arg2;
 
-                theNode = document.createElement(arg1);
+                theNode = root.document.createElement(arg1);
 
                 if (theNode)
                 {
@@ -274,7 +271,7 @@ ra.prependChild = function(parent, child)
 };
 
 //
-if (document.getElementsByClassName)
+if (root.document.getElementsByClassName)
 {
     ra.getElementsByClassName = function(rootElem, className)
     {
@@ -312,38 +309,38 @@ ra.getAllElements = function(rootElem)
 //
 ra.scrollToBottom = function()
 {
-    setTimeout(function(){ window.scrollTo(0,document.body.scrollHeight); }, 0);
+    setTimeout(function(){ root.scrollTo(0,root.document.body.scrollHeight); }, 0);
 };
 
 
 //
 ra.clear_console = function()
 {
-    window.console && window.console.clear();
+    root.console && root.console.clear();
 };
 
 //
 ra.log = function(msg)
 {
-    ra.outputEnabled && ra.logEnabled && window.console && window.console.log(msg);
+    ra.outputEnabled && ra.logEnabled && root.console && root.console.log(msg);
 };
 
 //
 ra.info = function(msg)
 {
-    ra.outputEnabled && ra.infoEnabled && window.console && window.console.info(msg);
+    ra.outputEnabled && ra.infoEnabled && root.console && root.console.info(msg);
 };
 
 //
 ra.warn = function(msg)
 {
-    ra.outputEnabled && ra.warnEnabled && window.console && window.console.warn(msg);
+    ra.outputEnabled && ra.warnEnabled && root.console && root.console.warn(msg);
 };
 
 //
 ra.error = function(msg)
 {
-    ra.outputEnabled && ra.errorEnabled && window.console && window.console.error(msg);
+    ra.outputEnabled && ra.errorEnabled && root.console && root.console.error(msg);
 };
 
 //
@@ -353,13 +350,13 @@ ra.loadScript = function(filename, onload, element_id)
 
     if (filename.slice(-3) == ".js")
     {
-        elem = document.createElement('script');
+        elem = root.document.createElement('script');
         elem.type = "text/javascript";
         elem.src = filename;
     }
     else
     {
-        elem = document.createElement('link');
+        elem = root.document.createElement('link');
         elem.rel = "stylesheet";
         elem.type = "text/css";
         elem.href = filename;
@@ -388,12 +385,12 @@ ra.loadScript = function(filename, onload, element_id)
         var old_elem = ra.el(element_id);
         if (old_elem)
         {
-            document.getElementsByTagName("head")[0].replaceChild(elem, old_elem);
+            root.document.getElementsByTagName("head")[0].replaceChild(elem, old_elem);
             return;
         }
     }
 
-    document.getElementsByTagName("head")[0].appendChild(elem);
+    root.document.getElementsByTagName("head")[0].appendChild(elem);
 };
 
 //
