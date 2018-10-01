@@ -4,8 +4,6 @@ define(['radi', 'splitbox'], function (ra, sb) {
 'use strict';
 var app = {};
 
-var container = undefined;
-
 app.css = function()
 {
     return ra.create
@@ -22,6 +20,10 @@ app.css = function()
                 max-height: 100vh;\
                 margin: 0;\
                 padding: 0;\
+            }\
+            .leaf\
+            {\
+                flex-grow: 1;\
             }\
             .container\
             {\
@@ -59,48 +61,78 @@ var panelDOM = function(content)
     );
 };
 
-//
 var layout =
 {
-    srow:
+    scol:
     [
         {
-            scol:
+            srow:
             [
-                panelDOM("A"),
-                panelDOM("B"),
-                panelDOM("C"),
+                panelDOM("C")
             ]
         },
         {
-            scol:
+            srow:
             [
+                panelDOM("D1"),
                 {
-                    srow:
+                    scol:
                     [
-                        panelDOM("D"),
-                        panelDOM("E"),
-                        panelDOM("F")
+                        panelDOM("E1"),
+                        panelDOM("E2"),
+                        panelDOM("E3")
                     ]
                 },
-                {
-                    srow:
-                    [
-                        panelDOM("G"),
-                        panelDOM("H"),
-                        panelDOM("I"),
-                        panelDOM("J")
-                    ]
-                }
+                [
+                    panelDOM("D3")
+                ]
             ]
         }
     ]
 };
 
 //
+//var layout =
+//{
+//    srow:
+//    [
+//        {
+//            scol:
+//            [
+//                panelDOM("A"),
+//                panelDOM("B"),
+//                panelDOM("C"),
+//            ]
+//        },
+//        {
+//            scol:
+//            [
+//                {
+//                    srow:
+//                    [
+//                        panelDOM("D"),
+//                        panelDOM("E"),
+//                        panelDOM("F")
+//                    ]
+//                },
+//                {
+//                    srow:
+//                    [
+//                        panelDOM("G"),
+//                        panelDOM("H"),
+//                        panelDOM("I"),
+//                        panelDOM("J")
+//                    ]
+//                }
+//            ]
+//        }
+//    ]
+//};
+
+//
 app.go = function(state)
 {
-    container = containerDOM();
+    var container = containerDOM();
 
     ra.append
     (
